@@ -1,10 +1,11 @@
-import Weather from './Weather'
+import React from 'react';
+import DashboardLayoutBasic from './components/Dashboard';
 
 
 export default function App() {
   return (
     <>
-      <Weather />
+      <DashboardLayoutBasic />
     </>
   );
 }
