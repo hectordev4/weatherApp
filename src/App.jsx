@@ -1,12 +1,12 @@
 import React from 'react';
-import DashboardLayoutBasic from './components/Dashboard';
-
+import AppRoutes from './Routes';
+import ErrorBoundary from './components/ErrorBoundary';
 
 export default function App() {
   return (
-    <>
-      <DashboardLayoutBasic />
-    </>
+    <ErrorBoundary>
+      <AppRoutes />
+    </ErrorBoundary>
   );
 }
 

@@ -7,6 +7,7 @@ import { Home, Info, Map, Thunderstorm } from '@mui/icons-material';
 import { AppProvider } from '@toolpad/core/AppProvider';
 import { DashboardLayout } from '@toolpad/core/DashboardLayout';
 import { useDemoRouter } from '@toolpad/core/internal';
+import { Outlet } from 'react-router-dom';
 
 
 const NAVIGATION = [
@@ -41,7 +42,7 @@ const NAVIGATION = [
   },
 ];
 
-const demoTheme = createTheme({
+const theme = createTheme({
   cssVariables: {
     colorSchemeSelector: 'data-toolpad-color-scheme',
   },
@@ -57,7 +58,7 @@ const demoTheme = createTheme({
   },
 });
 
-function DemoPageContent({ pathname }) {
+function PageContent({ pathname }) {
   return (
     <Box
       sx={{
@@ -73,7 +74,7 @@ function DemoPageContent({ pathname }) {
   );
 }
 
-DemoPageContent.propTypes = {
+PageContent.propTypes = {
   pathname: PropTypes.string.isRequired,
 };
 
@@ -94,16 +95,19 @@ function DashboardLayoutBasic(props) {
         homeUrl: '/home',
       }}
       router={router}
-      theme={demoTheme}
+      theme={theme}
       window={window}
     >
       <DashboardLayout>
-        <DemoPageContent pathname={router.pathname} />
+        <Outlet />
       </DashboardLayout>
     </AppProvider>
     // preview-end
   );
 }
 
+DashboardLayoutBasic.propTypes = {
+  window: PropTypes.object,
+};
 
 export default DashboardLayoutBasic;

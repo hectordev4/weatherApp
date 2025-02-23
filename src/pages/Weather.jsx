@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+/*import { useState, useEffect } from "react";
 import axios from "axios";
 
 const containerStyle = {
@@ -10,9 +10,18 @@ const containerStyle = {
     boxShadow: "0 2px 5px rgba(0, 0, 0, 0.1)",
     backgroundColor: "#f9f9f9",
   };
+*/
 
+  
+import React from 'react';
 
-export default function Weather() {
+const Weather = () => {
+  return <h1>Weather Page</h1>;
+};
 
-    
-}
+export default Weather;
+
+/*export default function Weather() {
+
+  
+}*/
