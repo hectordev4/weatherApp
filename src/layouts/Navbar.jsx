@@ -1,5 +1,7 @@
 import { Link, NavLink } from "react-router-dom";
 
+import Logo from '../assets/Logo.webp';
+
 import * as React from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -9,7 +11,6 @@ import Typography from '@mui/material/Typography';
 import Menu from '@mui/material/Menu';
 import MenuIcon from '@mui/icons-material/Menu';
 import Container from '@mui/material/Container';
-import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
@@ -41,7 +42,7 @@ function ResponsiveAppBar() {
     <AppBar position="static">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <img src="https://cdn2.iconfinder.com/data/icons/weather-flat-14/64/weather02-512.png" sx={{ display: { xs: 'none', md: 'flex' }, mr: 1, }} 
+          <img src={Logo} sx={{ display: { xs: 'none', md: 'flex' }, mr: 1, }} 
           style= {{
             width: '50px',
             height: 'auto',

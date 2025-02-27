@@ -1,5 +1,5 @@
 import React from 'react';
-import { Navigate, Route, Routes, Router} from 'react-router-dom';
+import { Navigate, Route, Routes} from 'react-router-dom';
 import NavBar from './layouts/Navbar';
 import Home from './pages/Home';
 import Weather from './pages/Weather';
