@@ -1,0 +1,90 @@
+/* About Page Styles */
+.about-container {
+    min-height: 100vh;
+    background: linear-gradient(90deg, #4facfe, #00f2fe);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 2rem;
+  }
+  
+  .about-header {
+    background-color: white;
+    padding: 3rem;
+    border-radius: 1.5rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    margin-top: 2rem;
+    max-width: 40rem;
+    width: 100%;
+  }
+  
+  .about-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #3182ce;
+  }
+  
+  .about-description {
+    color: #4a5568;
+    margin-top: 1rem;
+    font-size: 1.125rem;
+  }
+  
+  .about-features {
+    margin-top: 3rem;
+    max-width: 40rem;
+    width: 100%;
+  }
+  
+  .features-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #3182ce;
+  }
+  
+  .features-list {
+    list-style-type: disc;
+    color: #4a5568;
+    margin-top: 1rem;
+    padding-left: 2rem;
+    font-size: 1.125rem;
+    list-style: none;
+  }
+  
+  .about-team {
+    margin-top: 3rem;
+    max-width: 40rem;
+    width: 100%;
+  }
+  
+  .team-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #3182ce;
+  }
+  
+  .team-description {
+    color: #4a5568;
+    margin-top: 1rem;
+    font-size: 1.125rem;
+  }
+  
+  .about-footer {
+    margin-top: 3rem;
+    font-size: 1rem;
+    color: #6b7280;
+  }
+  
+  @media (min-width: 768px) {
+    .about-container {
+      padding: 4rem;
+    }
+  
+    .about-header,
+    .about-features,
+    .about-team {
+      max-width: 60rem;
+    }
+  }
+  

@@ -6,6 +6,7 @@ import Weather from './pages/Weather';
 import Map from './pages/Map';
 import About from './pages/About';
 import NoPage from './pages/NoPage';
+import './styles/App.css';
 // import ErrorBoundary from './components/ErrorBoundary';
 
 export default function App() {

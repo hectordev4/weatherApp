@@ -1,0 +1,281 @@
+/* General page styles */
+body {
+    font-family: 'Arial', sans-serif;
+  }
+  
+  .min-h-screen {
+    min-height: 100vh;
+  }
+  
+  .bg-gradient-to-r {
+    background: linear-gradient(90deg, #4facfe, #00f2fe);
+  }
+  
+  .text-center {
+    text-align: center;
+  }
+  
+  .text-gray-600 {
+    color: #4a5568;
+  }
+  
+  .text-gray-500 {
+    color: #6b7280;
+  }
+  
+  .text-blue-600 {
+    color: #3182ce;
+  }
+  
+  .mt-10 {
+    margin-top: 2.5rem;
+  }
+  
+  .mt-6 {
+    margin-top: 1.5rem;
+  }
+  
+  /* Hero Section */
+  .bg-white {
+    background-color: #ffffff;
+  }
+  
+  .rounded-2xl {
+    border-radius: 1.5rem;
+  }
+  
+  .shadow-xl {
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  }
+  
+  .max-w-lg {
+    max-width: 32rem;
+  }
+  
+  .w-full {
+    width: 100%;
+  }
+  
+  .hover\:bg-blue-700:hover {
+    background-color: #2b6cb0;
+  }
+  
+  .transition-all {
+    transition: all 0.3s ease;
+  }
+  
+  .duration-300 {
+    transition-duration: 300ms;
+  }
+  
+  /* Activity Cards */
+  .grid {
+    display: grid;
+  }
+  
+  .grid-cols-1 {
+    grid-template-columns: repeat(1, 1fr);
+  }
+  
+  .md\:grid-cols-3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  
+  .gap-6 {
+    gap: 1.5rem;
+  }
+  
+  .p-6 {
+    padding: 1.5rem;
+  }
+  
+  .card {
+    padding: 1.25rem;
+    background-color: white;
+    border-radius: 1rem;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+  }
+  
+  .card:hover {
+    transform: scale(1.05);
+  }
+  
+  .card h2 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-top: 0.5rem;
+  }
+  
+  .card p {
+    color: #4a5568;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+  }
+  
+  /* Weather Theme Section */
+  .weather-icon {
+    transition: transform 0.3s ease;
+  }
+  
+  .weather-icon:hover {
+    transform: rotate(15deg);
+  }
+  
+  .weather-text {
+    font-size: 1.125rem;
+    font-weight: 500;
+    margin-top: 0.5rem;
+  }
+  
+  /* Footer */
+  footer {
+    margin-top: 2.5rem;
+    font-size: 0.875rem;
+  }
+  
+  /* Animation Effects */
+  .fade-in {
+    animation: fadeIn 1s ease-in-out;
+  }
+  
+  @keyframes fadeIn {
+    0% {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  /* Button hover animation */
+  .btn-hover {
+    transition: background-color 0.3s ease, transform 0.3s ease;
+  }
+  
+  .btn-hover:hover {
+    background-color: #2b6cb0;
+    transform: translateY(-3px);
+  }
+  
+  /* Homepage Container */
+  .homepage-container {
+    min-height: 100vh;
+    background: linear-gradient(90deg, #4facfe, #00f2fe);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 1.5rem;
+  }
+  
+  /* Hero Section */
+  .hero-section {
+    background-color: white;
+    padding: 2.5rem;
+    border-radius: 1.5rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    margin-top: 2.5rem;
+    max-width: 32rem;
+    width: 100%;
+  }
+  
+  .hero-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #3182ce;
+  }
+  
+  .hero-subtitle {
+    color: #4a5568;
+    margin-top: 0.5rem;
+  }
+  
+  /* Button */
+  .explore-btn {
+    margin-top: 1.5rem;
+    background-color: #3182ce;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+  }
+  
+  .explore-btn:hover {
+    background-color: #2b6cb0;
+    transform: translateY(-3px);
+  }
+  
+  /* Activities Section */
+  .activities-section {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: 1.5rem;
+    margin-top: 2.5rem;
+    max-width: 64rem;
+  }
+  
+  @media (min-width: 768px) {
+    .activities-section {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  
+  /* Activity Card */
+  .activity-card {
+    padding: 1.25rem;
+    background-color: white;
+    border-radius: 1rem;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+  }
+  
+  .activity-card:hover {
+    transform: scale(1.05);
+  }
+  
+  .activity-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-top: 0.5rem;
+  }
+  
+  .activity-description {
+    color: #4a5568;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+  }
+  
+  /* Weather Theme */
+  .weather-theme {
+    margin-top: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .weather-icon-sunny {
+    color: #f6ad55;
+  }
+  
+  .weather-icon-cloudy {
+    color: #718096;
+  }
+  
+  .weather-icon-snowy {
+    color: #63b3ed;
+  }
+  
+  .weather-text {
+    color: #4a5568;
+    margin-top: 0.5rem;
+    font-size: 1.125rem;
+    font-weight: 500;
+  }
+  
+  /* Footer */
+  .footer {
+    margin-top: 2.5rem;
+    color: #6b7280;
+    font-size: 0.875rem;
+  }
+  

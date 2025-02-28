@@ -1,5 +1,5 @@
 import axios from "axios";
-import { VITE_OPEN_WEATHER_API_KEY } from "$lib/env";
+import { VITE_OPEN_WEATHER_API_KEY } from "/home/hector/Documents/myProjects/weatherApp/.env";
 
 export const getWeather = async (city) => {
   const response = await axios.get(

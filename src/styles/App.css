@@ -1,7 +1,8 @@
 #root {
   max-width: 1280px;
   margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
 }
-
+body {
+  min-height: 100vh;
+  background: linear-gradient(90deg, #4facfe, #00f2fe);
+}

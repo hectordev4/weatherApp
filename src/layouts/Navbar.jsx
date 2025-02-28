@@ -92,10 +92,10 @@ function ResponsiveAppBar() {
               onClose={handleCloseNavMenu}
               sx={{ display: { xs: 'block', md: 'none' } }}
             >
-              {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
+              {pages.map((page) => ( //this map is for the desktop view
+                <MenuItem key={page} onClick={handleCloseNavMenu}
+                sx= {{ alignContent: 'center', textAlign: 'center' }} >
                   <Link to={`/${page.toLowerCase()}`}>{page}</Link>
-                  
                 </MenuItem>
               ))}
             </Menu>
