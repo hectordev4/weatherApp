@@ -163,7 +163,7 @@ body {
   /* Homepage Container */
   .homepage-container {
     min-height: 100vh;
-    background: linear-gradient(90deg, #4facfe, #00f2fe);
+
     display: flex;
     flex-direction: column;
     align-items: center;
