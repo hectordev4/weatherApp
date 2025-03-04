@@ -2,6 +2,8 @@ import { Link, NavLink } from "react-router-dom";
 
 import Logo from '../assets/Logo.webp';
 
+import ToggleMode from '../components/ToggleMode';
+
 import * as React from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -94,8 +96,10 @@ function ResponsiveAppBar() {
             >
               {pages.map((page) => ( //this map is for the desktop view
                 <MenuItem key={page} onClick={handleCloseNavMenu}
-                sx= {{ alignContent: 'center', textAlign: 'center' }} >
-                  <Link to={`/${page.toLowerCase()}`}>{page}</Link>
+                sx= {{ alignContent: 'center', textAlign: 'center'}} >
+                  <Link to={`/${page.toLowerCase()}`}
+                  sx={{ textAlign: 'center'}}
+                  >{page}</Link>
                 </MenuItem>
               ))}
             </Menu>
@@ -132,6 +136,7 @@ function ResponsiveAppBar() {
             ))}
           </Box>
           <Box sx={{ flexGrow: 0 }}>
+            <ToggleMode />
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                 <PersonIcon sx={{
