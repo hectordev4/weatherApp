@@ -1,9 +1,6 @@
 import { Link, NavLink } from "react-router-dom";
-
 import Logo from '../assets/Logo.webp';
-
 import ToggleMode from '../components/ToggleMode';
-
 import * as React from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -21,7 +18,7 @@ import PersonIcon from '@mui/icons-material/Person';
 const pages = ['Home', 'Weather', 'Map', 'About'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
-function ResponsiveAppBar() {
+function ResponsiveAppBar({ mode, setMode }) {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
 
@@ -135,8 +132,8 @@ function ResponsiveAppBar() {
               </Button>
             ))}
           </Box>
-          <Box sx={{ flexGrow: 0 }}>
-            <ToggleMode />
+          <Box sx={{ flexGrow: 0, display: 'flex', alignItems: 'center', gap: 2 }}>
+            <ToggleMode mode={mode} setMode={setMode} /> {/* Pass mode and setMode to ToggleMode */}
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                 <PersonIcon sx={{
@@ -173,4 +170,5 @@ function ResponsiveAppBar() {
     </AppBar>
   );
 }
+
 export default ResponsiveAppBar;

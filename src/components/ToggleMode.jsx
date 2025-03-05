@@ -1,30 +1,33 @@
 import * as React from 'react';
-import LightModeIcon from '@mui/icons-material/LightMode';
-import DarkModeIcon from '@mui/icons-material/DarkMode';
-import Container from '@mui/material/Stack';
+import { useState, useEffect } from 'react';
+import RadioGroup from '@mui/material/RadioGroup';
+import Radio from '@mui/material/Radio';
+import FormControl from '@mui/material/FormControl';
 import FormControlLabel from '@mui/material/FormControlLabel';
-import Switch from '@mui/material/Switch';
-import { ThemeProvider } from '@mui/material';
-import { useState } from 'react';
 
-export default function ToggleMode() {
+export default function ToggleButton({ mode, setMode }) {
+  const [isDarkMode, setIsDarkMode] = useState(false);
+
+  // Detect system theme preference on mount
+  useEffect(() => {
+    const prefersDarkMode = window.matchMedia(
+      "(prefers-color-scheme: dark)"
+    ).matches;
+    setIsDarkMode(prefersDarkMode);
+  }, []);
+
   return (
-    <Container direction="row" spacing={2}>
-      <LightModeIcon sx={{background: 'white', color: 'black', borderRadius: '150px', width: '50px', height:'auto', padding: '5px', alignContent: 'center'}}
-      />
-      <FormControlLabel
-        sx={{ display: 'block' }}
-        control={
-          <Switch
-            checked={ThemeProvider}
-            onChange={() => setTheme(!theme)}
-            name="loading"
-            color="primary"
-          />
-        }
-      />
-      <DarkModeIcon sx={{background: 'black', color: 'white', borderRadius: '150px', width: '25px', height:'auto', padding: '5px', alignContent: 'center'}}
-      />
-    </Container>
+      <FormControl>
+        <RadioGroup
+          aria-labelledby="demo-theme-toggle"
+          name="theme-toggle"
+          row
+          value={mode}
+          onChange={(event) => setMode(event.target.value)}
+        >
+          <FormControlLabel value="light" control={<Radio />} label="Light" />
+          <FormControlLabel value="dark" control={<Radio />} label="Dark" />
+        </RadioGroup>
+      </FormControl>
   );
 }
