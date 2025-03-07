@@ -14,7 +14,8 @@ export default function ToggleButton({ mode, setMode }) {
       "(prefers-color-scheme: dark)"
     ).matches;
     setIsDarkMode(prefersDarkMode);
-  }, []);
+    setMode(prefersDarkMode ? 'dark' : 'light');
+  }, [setMode]);
 
   return (
       <FormControl>

@@ -101,7 +101,7 @@ function MinimapControl({ position, zoom }) {
   const parentMap = useMap();
   const mapZoom = zoom || 3;
 
-  // Memoize the minimap so it's not affected by position changes
+  // Memorize the minimap so it's not affected by position changes
   const minimap = useMemo(
     () => (
       <MapContainer
