@@ -1,16 +1,22 @@
 import React from 'react';
+import { motion } from 'framer-motion';
 import '../styles/About.css';
 
 export default function AboutPage() {
   return (
     <div className="about-container">
-      <section className="about-header">
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="about-header"
+      >
         <h1 className="about-title">About Weather-Themed Fun</h1>
         <p className="about-description">
           Welcome to Weather-Themed Fun! This app is designed to help you discover exciting activities based on today's weather.
           Whether it's a sunny day, cloudy skies, or snowy fun, we provide suggestions to match your current surroundings and mood.
         </p>
-      </section>
+      </motion.div>
 
       <section className="about-features">
         <h2 className="features-title">Our Features</h2>

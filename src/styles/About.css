@@ -45,7 +45,7 @@
   
   .features-list {
     list-style-type: disc;
-    color: #4a5568;
+    color: #b5d0ff;
     margin-top: 1rem;
     padding-left: 2rem;
     font-size: 1.125rem;
@@ -65,7 +65,7 @@
   }
   
   .team-description {
-    color: #4a5568;
+    color: #b5d0ff;
     margin-top: 1rem;
     font-size: 1.125rem;
   }
@@ -73,7 +73,7 @@
   .about-footer {
     margin-top: 3rem;
     font-size: 1rem;
-    color: #6b7280;
+    color: #b38aff;
   }
   
   @media (min-width: 768px) {

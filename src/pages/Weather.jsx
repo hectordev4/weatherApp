@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { motion } from "framer-motion";
 import '../styles/Weather.css';  // Assuming the CSS is saved in styles.css
 
 export default function Weather() {
@@ -39,8 +40,13 @@ export default function Weather() {
   }, []); // Fetch default data on load if needed
 
   return (
-    <div className="container">
-      <h1>Weather Tracker</h1>
+    <motion.div
+      initial={{ opacity: 0, y: -20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+      className="container"
+    >
+      <h1 className = "title">Weather Tracker</h1>
       <div className="input-container">
         <input
           type="text"
@@ -50,6 +56,7 @@ export default function Weather() {
         />
         <button onClick={fetchWeatherData}>Search</button>
       </div>
+
       {loading && <p>Loading...</p>}
       {error && <p className="error">{error}</p>}
       {weather && (
@@ -58,7 +65,9 @@ export default function Weather() {
           <p>
             Temperature: <span className="temp">{weather.main.temp}</span>°C
           </p>
-          <p className="condition">Condition: {weather.weather[0].description}</p>
+          <p className="condition">
+            Condition: {weather.weather[0].description}
+          </p>
         </div>
       )}
       {forecast.length > 0 && (
@@ -67,12 +76,14 @@ export default function Weather() {
           {forecast.map((day, index) => (
             <div key={index} className="forecast-day">
               <p>Date: {new Date(day.dt_txt).toLocaleDateString()}</p>
-              <p>Temp: <b>{day.main.temp}</b> °C</p>
+              <p>
+                Temp: <b>{day.main.temp}</b> °C
+              </p>
               <p>Condition: {day.weather[0].description}</p>
             </div>
           ))}
         </div>
       )}
-    </div>
+    </motion.div>
   );
 }
