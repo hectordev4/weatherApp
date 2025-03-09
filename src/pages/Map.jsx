@@ -1,173 +1,187 @@
-import React, {useState, useEffect, useRef, useMemo, useCallback} from 'react';
-import { Container } from '@mui/material';
-import { MapContainer, TileLayer, Marker, Popup, Rectangle } from 'react-leaflet';
-import 'leaflet/dist/leaflet.css';
+import React, { useState, useEffect, useRef, useReducer } from "react";
+import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from "react-leaflet";
+import "leaflet/dist/leaflet.css";
+import axios from "axios";
+import SearchBar from "../components/SearchBar";
 
-import { useMapEvents, useMapEvent, useMap } from 'react-leaflet';
+// OpenWeatherMap API Key
+const WEATHER_API_KEY = import.meta.env.VITE_OPEN_WEATHER_API_KEY;
 
-
-const center = {
-  lat: 41.416969,
-  lng: 2.133021,
+const initialState = {
+  position: [41.416969, 2.133021], // Default position (CIFO La Violeta)
+  cityName: "",
+  favorites: [],
+  weather: null,
 };
 
-//Draggable Marker
-function DraggableMarker() {
-  const [draggable, setDraggable] = useState(false);
-  const [position, setPosition] = useState(center);
-  const markerRef = useRef(null);
-  const eventHandlers = useMemo(
-    () => ({
-      dragend() {
-        const marker = markerRef.current
-        if (marker != null) {
-          setPosition(marker.getLatLng())
-        }
-      },
-    }),
-    [],
-  );
-  const toggleDraggable = useCallback(() => {
-    setDraggable((d) => !d)
+const reducer = (state, action) => {
+  switch (action.type) {
+    case "SET_POSITION":
+      return { ...state, position: action.payload };
+    case "SET_CITY_NAME":
+      return { ...state, cityName: action.payload };
+    case "SET_FAVORITES":
+      return { ...state, favorites: action.payload };
+    case "SET_WEATHER":
+      return { ...state, weather: action.payload };
+    default:
+      return state;
+  }
+};
+
+const MapComponent = () => {
+  const [state, dispatch] = useReducer(reducer, initialState);
+  const { position, cityName, favorites, weather } = state;
+  const mapRef = useRef();
+
+  useEffect(() => {
+    const savedFavorites = JSON.parse(localStorage.getItem("favorites")) || [];
+    dispatch({ type: "SET_FAVORITES", payload: savedFavorites });
   }, []);
-
-  return (
-    <Marker
-      draggable={draggable}
-      eventHandlers={eventHandlers}
-      position={position}
-      ref={markerRef}>
-      <Popup minWidth={90}>
-        <span onClick={toggleDraggable}>
-          {draggable
-            ? 'Marker is draggable'
-            : 'This is Cifo La Violeta!'}
-        </span>
-      </Popup>
-    </Marker>
-  )
-};
-
-//Animation Marker to center view to a point
-function SetViewOnClick({ animateRef }) {
-  const map = useMapEvent('click', (e) => {
-    map.setView(e.latlng, map.getZoom(), {
-      animate: animateRef.current || false,
-    })
-  });
-};
-
-//MiniMap
-// Classes used by Leaflet to position controls
-const POSITION_CLASSES = {
-  bottomleft: 'leaflet-bottom leaflet-left',
-  bottomright: 'leaflet-bottom leaflet-right',
-  topleft: 'leaflet-top leaflet-left',
-  topright: 'leaflet-top leaflet-right',
-};
-
-const BOUNDS_STYLE = { weight: 1 };
-
-function MinimapBounds({ parentMap, zoom }) {
-  const minimap = useMap();
-
-  // Clicking a point on the minimap sets the parent's map center
-  const onClick = useCallback(
-    (e) => {
-      parentMap.setView(e.latlng, parentMap.getZoom())
-    },
-    [parentMap],
-  );
-  useMapEvent('click', onClick);
-
-  // Keep track of bounds in state to trigger renders
-  const [bounds, setBounds] = useState(parentMap.getBounds())
-  const onChange = useCallback(() => {
-    setBounds(parentMap.getBounds())
-    // Update the minimap's view to match the parent map's center and zoom
-    minimap.setView(parentMap.getCenter(), zoom)
-  }, [minimap, parentMap, zoom]);
-
-  // Listen to events on the parent map
-  useMapEvents({
-    move: onChange,
-    zoom: onChange,
-  });
-
-  return <Rectangle bounds={bounds} pathOptions={BOUNDS_STYLE} />
-};
-
-function MinimapControl({ position, zoom }) {
-  const parentMap = useMap();
-  const mapZoom = zoom || 3;
-
-  // Memorize the minimap so it's not affected by position changes
-  const minimap = useMemo(
-    () => (
-      <MapContainer
-        style={{ height: 80, width: 80 }}
-        center={parentMap.getCenter()}
-        zoom={mapZoom}
-        dragging={false}
-        doubleClickZoom={false}
-        scrollWheelZoom={false}
-        attributionControl={false}
-        zoomControl={false}>
-        <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-        <MinimapBounds parentMap={parentMap} zoom={mapZoom} />
-      </MapContainer>
-    ),
-    [],
-  );
-
-  const positionClass =
-    (position && POSITION_CLASSES[position]) || POSITION_CLASSES.topright
-  return (
-    <div className={positionClass}>
-      <div className="leaflet-control leaflet-bar">{minimap}</div>
-    </div>
-  )
-};
-
-
-//Main Map
-const Map = () => {
 
   const animateRef = useRef(true);
 
-  const [locations, setLocations] = useState([]);
+  const getCityName = async (lat, lon) => {
+    try {
+      const response = await axios.get(
+        `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json`
+      );
+      const city =
+        response.data.address?.city || response.data.address?.town || "Unknown";
+      dispatch({ type: "SET_CITY_NAME", payload: city });
+      fetchWeather(lat, lon);
+    } catch (error) {
+      console.error("Error fetching city name:", error);
+    }
+  };
 
-  useEffect(() => {
-    fetch("https://api.example.com/locations")
-      .then((response) => response.json())
-      .then((data) => setLocations(data));
-  }, []);
+  const fetchWeather = async (lat, lon) => {
+    try {
+      const response = await axios.get(
+        `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${WEATHER_API_KEY}&units=metric`
+      );
+      dispatch({ type: "SET_WEATHER", payload: response.data.list.slice(0, 3) }); // Get 3-day forecast
+    } catch (error) {
+      console.error("Error fetching weather:", error);
+    }
+  };
+
+  const addToFavorites = () => {
+    if (cityName && !favorites.some(fav => fav.name === cityName)) {
+      const updatedFavorites = [...favorites, { name: cityName, lat: position[0], lon: position[1] }];
+      dispatch({ type: "SET_FAVORITES", payload: updatedFavorites });
+      localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
+    }
+  };
+
+  const removeFromFavorites = (city) => {
+    const updatedFavorites = favorites.filter((fav) => fav.name !== city);
+    dispatch({ type: "SET_FAVORITES", payload: updatedFavorites });
+    localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
+  };
+
+  const handleSearchSelect = ({ lat, lon }) => {
+    dispatch({ type: "SET_POSITION", payload: [lat, lon] });
+    getCityName(lat, lon);
+    if (mapRef.current) {
+      mapRef.current.flyTo([lat, lon], mapRef.current.getZoom(), {
+        animate: true,
+      });
+    }
+  };
+
+  const handleMapClick = (lat, lon) => {
+    dispatch({ type: "SET_POSITION", payload: [lat, lon] });
+    getCityName(lat, lon);
+    if (mapRef.current) {
+      mapRef.current.flyTo([lat, lon], mapRef.current.getZoom(), {
+        animate: true,
+      });
+    }
+  };
+
+  const LocationMarker = () => {
+    useMapEvents({
+      click(e) {
+        handleMapClick(e.latlng.lat, e.latlng.lng);
+      },
+    });
+    return (
+      <Marker position={position}>
+        <Popup>
+          <h2>{cityName || "Click on a city"}</h2>
+          {weather &&
+            weather.map((day, index) => (
+              <div key={index}>
+                <p>{new Date(day.dt * 1000).toLocaleDateString()}</p>
+                <p>{day.weather[0].main}</p>
+                <p>{Math.round(day.main.temp)}°C</p>
+              </div>
+            ))}
+          <button onClick={addToFavorites}>⭐ Save to Favorites</button>
+        </Popup>
+      </Marker>
+    );
+  };
 
   return (
-    <Container sx={{ 
-      marginTop: 2,
-      }}>
+    <div style={{ display: "flex" }}>
+      
+      <div style={{ flex: 1 }}>
+      <SearchBar onSelect={handleSearchSelect} />
+        <MapContainer
+          center={position}
+          zoom={5}
+          style={{ height: "100vh", width: "100%" }}
+          whenCreated={(mapInstance) => { mapRef.current = mapInstance; }}
+        >
+          <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+          <LocationMarker />
+        </MapContainer>
         
-      <MapContainer
-        center={center}
-        zoom={13}
-        style={{ height: "100vh", width: "100%" }}
+      </div>
+
+      {/* Favorites Sidebar */}
+      <div
+        style={{
+          width: "250px",
+          padding: "10px",
+          background: "#f8f9fa",
+          borderLeft: "1px solid #ddd",
+          listStyle: "none",
+        }}
       >
-        <TileLayer
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        />
-        {locations.map((location, idx) => (
-          <Marker key={idx} position={[location.lat, location.lon]}>
-            <Popup>{location.name}</Popup>
-          </Marker>
-        ))}
-        <DraggableMarker />
-        <SetViewOnClick animateRef={animateRef} />
-        <MinimapControl position="topright" />
-      </MapContainer>
-    </Container>
+        <h3>Favorites</h3>
+        <ul style={{ listStyle: "none" }}>
+          {favorites.map((city, index) => (
+            <li key={index} style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+              <span
+                onClick={() => {
+                  handleMapClick(city.lat, city.lon);
+                }}
+                style={{
+                  cursor: "pointer",
+                }}
+              >
+                {city.name}
+              </span>
+              <button
+                onClick={() => removeFromFavorites(city.name)}
+                style={{
+                  border: "none",
+                  background: "none",
+                  fontSize: "1rem",
+                  cursor: "pointer",
+                }}
+              >
+                ❌
+              </button>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
   );
 };
 
-export default Map;
+export default MapComponent;
