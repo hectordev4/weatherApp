@@ -1,10 +1,19 @@
-import React, { useState, useEffect, useRef, useReducer } from "react";
-import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from "react-leaflet";
+import React, { useState, useEffect, useReducer } from "react";
+import { MapContainer, TileLayer, useMap, useMapEvents } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import axios from "axios";
 import SearchBar from "../components/SearchBar";
 import FavoritesSidebar from "../components/FavoritesSidebar";
-import WeatherForecast from "../components/WeatherForecast";
+import CardMap from "../components/CardMap";
+import L from 'leaflet';
+
+// Fix for Leaflet icons
+delete L.Icon.Default.prototype._getIconUrl;
+L.Icon.Default.mergeOptions({
+  iconRetinaUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon-2x.png',
+  iconUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png',
+  shadowUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png',
+});
 
 const initialState = {
   position: [41.416969, 2.133021], // Default position (CIFO La Violeta)
@@ -26,11 +35,21 @@ const reducer = (state, action) => {
   }
 };
 
+const MapUpdater = ({ coords }) => {
+  const map = useMap();
+
+  useEffect(() => {
+    if (coords?.lat && coords?.lng) {
+      map.flyTo([coords.lat, coords.lng], 13, { animate: true });
+    }
+  }, [coords, map]);
+
+  return null;
+};
+
 const MapComponent = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const { position, cityName, favorites } = state;
-  const mapRef = useRef();
-  const animateRef = useRef(true);
 
   useEffect(() => {
     const savedFavorites = JSON.parse(localStorage.getItem("favorites")) || [];
@@ -53,11 +72,6 @@ const MapComponent = () => {
   const handleSearchSelect = ({ lat, lon }) => {
     dispatch({ type: "SET_POSITION", payload: [lat, lon] });
     getCityName(lat, lon);
-    if (mapRef.current) {
-      mapRef.current.flyTo([lat, lon], mapRef.current.getZoom(), {
-        animate: animateRef.current,
-      });
-    }
   };
 
   const addToFavorites = () => {
@@ -77,11 +91,6 @@ const MapComponent = () => {
   const handleMapClick = (lat, lon) => {
     dispatch({ type: "SET_POSITION", payload: [lat, lon] });
     getCityName(lat, lon);
-    if (mapRef.current) {
-      mapRef.current.flyTo([lat, lon], mapRef.current.getZoom(), {
-        animate: animateRef.current,
-      });
-    }
   };
 
   const LocationMarker = () => {
@@ -91,13 +100,7 @@ const MapComponent = () => {
       },
     });
     return (
-      <Marker position={position}>
-        <Popup>
-          <h2>{cityName || "Click on a city"}</h2>
-          <WeatherForecast lat={position[0]} lon={position[1]} />
-          <button onClick={addToFavorites}>⭐ Save to Favorites</button>
-        </Popup>
-      </Marker>
+      <CardMap position={position} cityName={cityName} addToFavorites={addToFavorites} favorites={favorites} />
     );
   };
 
@@ -109,8 +112,8 @@ const MapComponent = () => {
           center={position}
           zoom={5}
           style={{ height: "100vh", width: "100%" }}
-          whenCreated={(mapInstance) => { mapRef.current = mapInstance; }}
         >
+          <MapUpdater coords={{ lat: position[0], lng: position[1] }} />
           <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
           <LocationMarker />
         </MapContainer>
@@ -119,7 +122,6 @@ const MapComponent = () => {
       {/* Favorites Sidebar */}
       <FavoritesSidebar
         favorites={favorites}
-        onAddToFavorites={addToFavorites}
         onRemoveFromFavorites={removeFromFavorites}
         handleMapClick={handleMapClick}
       />

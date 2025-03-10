@@ -1,34 +1,35 @@
 import * as React from 'react';
-import { useState, useEffect } from 'react';
+import { styled } from '@mui/material/styles';
 import RadioGroup from '@mui/material/RadioGroup';
 import Radio from '@mui/material/Radio';
 import FormControl from '@mui/material/FormControl';
 import FormControlLabel from '@mui/material/FormControlLabel';
 
-export default function ToggleButton({ mode, setMode }) {
-  const [isDarkMode, setIsDarkMode] = useState(false);
+const CustomRadio = styled(Radio)(({ theme }) => ({
+  color: theme.palette.secondary.main,
+  '&.Mui-checked': {
+    color: theme.palette.accent.main,
+  },
+}));
 
-  // Detect system theme preference on mount
-  useEffect(() => {
-    const prefersDarkMode = window.matchMedia(
-      "(prefers-color-scheme: dark)"
-    ).matches;
-    setIsDarkMode(prefersDarkMode);
-    setMode(prefersDarkMode ? 'dark' : 'light');
-  }, [setMode]);
-
+export default function ToggleMode({ mode, setMode }) {
   return (
-      <FormControl>
-        <RadioGroup
-          aria-labelledby="demo-theme-toggle"
-          name="theme-toggle"
-          row
-          value={mode}
-          onChange={(event) => setMode(event.target.value)}
-        >
-          <FormControlLabel value="light" control={<Radio />} label="Light" />
-          <FormControlLabel value="dark" control={<Radio />} label="Dark" />
-        </RadioGroup>
-      </FormControl>
+    <FormControl>
+      <RadioGroup
+        aria-labelledby="demo-theme-toggle"
+        name="theme-toggle"
+        row
+        value={mode}
+        onChange={(event) => setMode(event.target.value)}
+        sx={{
+          '& .MuiFormControlLabel-label': {
+            color: 'text.primary',
+          },
+        }}
+      >
+        <FormControlLabel value="light" control={<CustomRadio />} label="Light" />
+        <FormControlLabel value="dark" control={<CustomRadio />} label="Dark" />
+      </RadioGroup>
+    </FormControl>
   );
 }

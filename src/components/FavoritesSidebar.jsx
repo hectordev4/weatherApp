@@ -1,46 +1,50 @@
 import React from 'react';
+import { Box, Typography, List, ListItem, ListItemText, IconButton } from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
 
-const FavoritesSidebar = ({ favorites, onAddToFavorites, onRemoveFromFavorites, handleMapClick }) => {
+const FavoritesSidebar = ({ favorites, onRemoveFromFavorites, handleMapClick }) => {
   return (
-    <div
-      style={{
-        width: "250px",
-        padding: "10px",
-        background: "#f8f9fa",
-        borderLeft: "1px solid #ddd",
-        listStyle: "none",
+    <Box
+      sx={{
+        width: 250,
+        padding: 2,
+        backgroundColor: 'background.paper',
+        borderLeft: 1,
+        borderColor: 'divider',
       }}
     >
-      <h3>Favorites</h3>
-      <ul style={{ listStyle: "none" }}>
+      <Typography variant="h6">Favorites</Typography>
+      <List>
         {favorites.map((city, index) => (
-          <li key={index} style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-            <span
-              onClick={() => {
-                handleMapClick(city.lat, city.lon);
-              }}
-              style={{
-                cursor: "pointer",
+          <ListItem
+            key={index}
+            sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
+          >
+            <Box
+              component="button"
+              onClick={() => handleMapClick(city.lat, city.lon)}
+              sx={{
+                background: 'none',
+                border: 'none',
+                padding: 0,
+                margin: 0,
+                cursor: 'pointer',
+                textAlign: 'center',
+                width: '100%',
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
               }}
             >
-              {city.name}
-            </span>
-            <button
-              onClick={() => onRemoveFromFavorites(city.name)}
-              style={{
-                border: "none",
-                background: "none",
-                fontSize: "1rem",
-                cursor: "pointer",
-              }}
-            >
-              ❌
-            </button>
-          </li>
+              <ListItemText primary={city.name} />
+            </Box>
+            <IconButton edge="end" onClick={() => onRemoveFromFavorites(city.name)}>
+              <DeleteIcon />
+            </IconButton>
+          </ListItem>
         ))}
-      </ul>
-      <button onClick={onAddToFavorites}>⭐ Save to Favorites</button>
-    </div>
+      </List>
+    </Box>
   );
 };
 

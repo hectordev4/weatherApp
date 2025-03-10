@@ -10,18 +10,15 @@ import { ThemeProvider, CssBaseline } from '@mui/material';
 import { lightTheme, darkTheme } from './styles/ThemeProvider';
 
 function App() {
-  const [mode, setMode] = useState('system');
-  const [isDarkMode, setIsDarkMode] = useState(false);
+  const [mode, setMode] = useState('light');
 
   // Detect system theme preference on mount
   useEffect(() => {
-    const prefersDarkMode = window.matchMedia(
-      "(prefers-color-scheme: dark)"
-    ).matches;
-    setIsDarkMode(prefersDarkMode);
+    const prefersDarkMode = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    setMode(prefersDarkMode ? 'dark' : 'light');
   }, []);
 
-  const theme = mode === 'system' ? (isDarkMode ? darkTheme : lightTheme) : (mode === 'dark' ? darkTheme : lightTheme);
+  const theme = mode === 'dark' ? darkTheme : lightTheme;
 
   return (
     <ThemeProvider theme={theme}>

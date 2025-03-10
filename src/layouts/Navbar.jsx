@@ -18,7 +18,7 @@ import PersonIcon from '@mui/icons-material/Person';
 const pages = ['Home', 'Weather', 'Map', 'About'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
-function ResponsiveAppBar({ mode, setMode }) {
+function NavBar({ mode, setMode }) {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
 
@@ -171,4 +171,4 @@ function ResponsiveAppBar({ mode, setMode }) {
   );
 }
 
-export default ResponsiveAppBar;
+export default NavBar;
