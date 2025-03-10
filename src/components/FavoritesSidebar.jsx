@@ -1,6 +1,6 @@
 import React from 'react';
 
-const FavoritesSidebar = ({ favorites, handleMapClick, removeFromFavorites }) => {
+const FavoritesSidebar = ({ favorites, onAddToFavorites, onRemoveFromFavorites, handleMapClick }) => {
   return (
     <div
       style={{
@@ -26,7 +26,7 @@ const FavoritesSidebar = ({ favorites, handleMapClick, removeFromFavorites }) =>
               {city.name}
             </span>
             <button
-              onClick={() => removeFromFavorites(city.name)}
+              onClick={() => onRemoveFromFavorites(city.name)}
               style={{
                 border: "none",
                 background: "none",
@@ -39,6 +39,7 @@ const FavoritesSidebar = ({ favorites, handleMapClick, removeFromFavorites }) =>
           </li>
         ))}
       </ul>
+      <button onClick={onAddToFavorites}>⭐ Save to Favorites</button>
     </div>
   );
 };

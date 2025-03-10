@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Select from "react-select";
 
-const SearchBar = ({ onSelect }) => {
+const SearchBar = ({ onSearchSelect }) => {
   const [options, setOptions] = useState([]);
   const [inputValue, setInputValue] = useState(localStorage.getItem("inputValue") || "");
   const [selectedOption, setSelectedOption] = useState(
@@ -49,6 +49,10 @@ const SearchBar = ({ onSelect }) => {
     }),
   };
 
+  const handleSelect = (lat, lon) => {
+    onSearchSelect({ lat, lon });
+  };
+
   return (
     <Select
       options={inputValue ? options : recentSearches}
@@ -68,7 +72,7 @@ const SearchBar = ({ onSelect }) => {
           localStorage.setItem("selectedOption", JSON.stringify(selected));
           localStorage.setItem("inputValue", selected.label);
           handleRecentSearches(selected);
-          onSelect(selected.value);
+          handleSelect(selected.value.lat, selected.value.lon);
         } else {
           setSelectedOption(null);
           setInputValue("");

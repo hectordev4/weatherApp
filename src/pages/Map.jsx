@@ -6,9 +6,6 @@ import SearchBar from "../components/SearchBar";
 import FavoritesSidebar from "../components/FavoritesSidebar";
 import WeatherForecast from "../components/WeatherForecast";
 
-// OpenWeatherMap API Key
-const WEATHER_API_KEY = import.meta.env.VITE_OPEN_WEATHER_API_KEY;
-
 const initialState = {
   position: [41.416969, 2.133021], // Default position (CIFO La Violeta)
   cityName: "",
@@ -53,6 +50,16 @@ const MapComponent = () => {
     }
   };
 
+  const handleSearchSelect = ({ lat, lon }) => {
+    dispatch({ type: "SET_POSITION", payload: [lat, lon] });
+    getCityName(lat, lon);
+    if (mapRef.current) {
+      mapRef.current.flyTo([lat, lon], mapRef.current.getZoom(), {
+        animate: animateRef.current,
+      });
+    }
+  };
+
   const addToFavorites = () => {
     if (cityName && !favorites.some(fav => fav.name === cityName)) {
       const updatedFavorites = [...favorites, { name: cityName, lat: position[0], lon: position[1] }];
@@ -65,16 +72,6 @@ const MapComponent = () => {
     const updatedFavorites = favorites.filter((fav) => fav.name !== city);
     dispatch({ type: "SET_FAVORITES", payload: updatedFavorites });
     localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
-  };
-
-  const handleSearchSelect = ({ lat, lon }) => {
-    dispatch({ type: "SET_POSITION", payload: [lat, lon] });
-    getCityName(lat, lon);
-    if (mapRef.current) {
-      mapRef.current.flyTo([lat, lon], mapRef.current.getZoom(), {
-        animate: animateRef.current,
-      });
-    }
   };
 
   const handleMapClick = (lat, lon) => {
@@ -106,9 +103,8 @@ const MapComponent = () => {
 
   return (
     <div style={{ display: "flex" }}>
-      
       <div style={{ flex: 1 }}>
-      <SearchBar onSelect={handleSearchSelect} />
+        <SearchBar onSearchSelect={handleSearchSelect} />
         <MapContainer
           center={position}
           zoom={5}
@@ -118,14 +114,14 @@ const MapComponent = () => {
           <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
           <LocationMarker />
         </MapContainer>
-        
       </div>
 
       {/* Favorites Sidebar */}
       <FavoritesSidebar
         favorites={favorites}
+        onAddToFavorites={addToFavorites}
+        onRemoveFromFavorites={removeFromFavorites}
         handleMapClick={handleMapClick}
-        removeFromFavorites={removeFromFavorites}
       />
     </div>
   );
